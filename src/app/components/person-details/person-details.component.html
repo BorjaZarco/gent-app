@@ -1,0 +1,25 @@
+<div class="relative">
+  <div class="p-4 flex flex-col border-b">
+    <div
+      class="h-32 w-32 rounded"
+      [ngStyle]="{
+        'background-image': 'url(' + 'https://picsum.photos/200/300' + ')'
+      }"
+    ></div>
+    <h2>{{ person?.name | titlecase }} {{ person?.surname | titlecase }}</h2>
+    <p>{{ person?.birthDate }}</p>
+  </div>
+  <div class="p-4">
+    <p>
+      Nacimiento: 22 de noviembre de 1984 (edad 36 años), Manhattan, Nueva York,
+    </p>
+    <p>Estatura: 1,6 m</p>
+    <p>Cónyuge: Colin Jost (m. 2020), Romain Dauriac</p>
+
+    <p>Hijos: Rose Dorothy Dauriac</p>
+    <p>Padres: Rose Dorothy Dauriac</p>
+    <p>
+      Hermanos: Vanessa Johansson, Hunter Johansson, Christian Johansson, Adrian
+    </p>
+  </div>
+</div>
