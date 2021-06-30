@@ -1,0 +1,24 @@
+<div
+  class="
+    shadow
+    relative
+    rounded
+    w-48
+    h-56
+    flex flex-col
+    justify-end
+    cursor-pointer
+    overflow-hidden
+  "
+>
+  <div
+    class="h-3/5 w-50"
+    [ngStyle]="{
+      'background-image': 'url(' + 'https://picsum.photos/200/300' + ')'
+    }"
+  ></div>
+  <div class="h-2/5 p-2">
+    <p>{{ person.name | titlecase }} {{ person.surname | titlecase }}</p>
+    <p>{{ person.birthDate }}</p>
+  </div>
+</div>
