@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PeopleService } from './services/people.service';
+import { PrimeNGConfig } from 'primeng/api';
 
 @Component({
   selector: 'app-root',
@@ -7,22 +7,9 @@ import { PeopleService } from './services/people.service';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  people: any[] = [];
-
-  selectedPerson = null;
-
-  constructor(private peopleService: PeopleService) {}
+  constructor(private primengConfig: PrimeNGConfig) {}
 
   ngOnInit() {
-    this.people = this.peopleService.getPeople();
-  }
-
-  onSelectPerson(selectedPerson: any) {
-    if (this.selectedPerson?.id === selectedPerson?.id) {
-      this.selectedPerson = null;
-    } else {
-      this.selectedPerson = selectedPerson;
-    }
-    console.log(this.selectedPerson);
+    this.primengConfig.ripple = true;
   }
 }
