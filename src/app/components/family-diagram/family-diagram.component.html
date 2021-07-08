@@ -1,9 +1,5 @@
 <div class="flex flex-col" [id]="'FAM' + personId">
-  <div
-    *ngIf="family"
-    class="flex justify-center pb-12 relative"
-    [ngClass]="{ 'border-b-2': family?.children?.length > 1 }"
-  >
+  <div *ngIf="family" class="flex justify-center pb-12 relative border-b-2">
     <a [routerLink]="[husband.id]" class="relative">
       <div
         *ngIf="parentPersonId && husband?.id === person?.id"
