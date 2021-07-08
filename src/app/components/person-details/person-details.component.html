@@ -1,5 +1,19 @@
 <div class="relative">
-  <div class="p-4 flex flex-col border-b">
+  <div class="p-4 flex flex-col border-b relative">
+    <a
+      [routerLink]="['../']"
+      pButton
+      pRipple
+      type="button"
+      icon="pi pi-times"
+      class="
+        p-button-rounded p-button-plain p-button-text
+        w-12
+        h-12
+        absolute
+        right-4
+      "
+    ></a>
     <div
       class="h-32 w-32 rounded"
       [ngStyle]="{
@@ -7,19 +21,65 @@
       }"
     ></div>
     <h2>{{ person?.name | titlecase }} {{ person?.surname | titlecase }}</h2>
-    <p>{{ person?.birthDate }}</p>
   </div>
   <div class="p-4">
     <p>
-      Nacimiento: 22 de noviembre de 1984 (edad 36 años), Manhattan, Nueva York,
+      Nacimiento:
+      {{ person?.birthDate || "-" | moment: "DD [de] MMMM [de] YYYY" }} (edad
+      {{ personAge || "?" }})
     </p>
-    <p>Estatura: 1,6 m</p>
-    <p>Cónyuge: Colin Jost (m. 2020), Romain Dauriac</p>
-
-    <p>Hijos: Rose Dorothy Dauriac</p>
-    <p>Padres: Rose Dorothy Dauriac</p>
+    <p>Lugar de nacimiento: {{ person?.birthPlace || "-" }}</p>
     <p>
-      Hermanos: Vanessa Johansson, Hunter Johansson, Christian Johansson, Adrian
+      Padres:
+      <span *ngFor="let person of parents; let i = index"
+        >{{ i > 0 ? ", " : ""
+        }}<a
+          [routerLink]="['../', person.id]"
+          class="text-blue-800 hover:text-blue-500 duration-300"
+        >
+          {{ (person | object: ["name", "surname"]) || "-" | titlecase }}
+        </a>
+      </span>
+      <span *ngIf="!parents?.length"> - </span>
+    </p>
+    <p>
+      Cónyuge:
+      <span *ngFor="let person of partners; let i = index"
+        >{{ i > 0 ? ", " : "" }}
+        <a
+          [routerLink]="['../', person.id]"
+          class="text-blue-800 hover:text-blue-500 duration-300"
+        >
+          {{ (person | object: ["name", "surname"]) || "-" | titlecase }}
+        </a>
+      </span>
+      <span *ngIf="!partners?.length"> - </span>
+    </p>
+    <p>
+      Hijos:
+      <span *ngFor="let person of children; let i = index"
+        >{{ i > 0 ? ", " : "" }}
+        <a
+          [routerLink]="['../', person.id]"
+          class="text-blue-800 hover:text-blue-500 duration-300"
+        >
+          {{ (person | object: ["name", "surname"]) || "-" | titlecase }}
+        </a>
+      </span>
+      <span *ngIf="!children?.length"> - </span>
+    </p>
+    <p>
+      Hermanos:
+      <span *ngFor="let person of siblings; let i = index"
+        >{{ i > 0 ? ", " : "" }}
+        <a
+          [routerLink]="['../', person.id]"
+          class="text-blue-800 hover:text-blue-500 duration-300"
+        >
+          {{ (person | object: ["name", "surname"]) || "-" | titlecase }}
+        </a>
+      </span>
+      <span *ngIf="!siblings?.length"> - </span>
     </p>
   </div>
 </div>
