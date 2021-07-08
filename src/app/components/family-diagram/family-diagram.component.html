@@ -1,0 +1,48 @@
+<div class="flex flex-col" [id]="'FAM' + personId">
+  <div *ngIf="family" class="flex justify-center pb-12 relative border-b-2">
+    <a [routerLink]="[husband.id]" class="relative">
+      <div
+        *ngIf="husband?.id === person?.id"
+        class="h-12 w-px absolute bg-gray-300 left-1/2 -top-12"
+      ></div>
+      <app-person-card [person]="husband"></app-person-card>
+    </a>
+    <div class="h-auto w-28 flex items-center justify-center relative">
+      <i
+        class="
+          pi pi-heart
+          text-xl text-white
+          rounded-full
+          text-red-500
+          w-14
+          h-14
+          flex
+          justify-center
+          items-center
+          shadow
+        "
+      ></i>
+      <div class="h-32 w-px absolute bg-gray-300 left-1/2 -bottom-12"></div>
+    </div>
+    <a [routerLink]="[wife.id]" class="relative">
+      <div
+        *ngIf="wife?.id === person?.id"
+        class="h-12 w-px absolute bg-gray-300 left-1/2 -top-12"
+      ></div>
+      <app-person-card [person]="wife"></app-person-card>
+    </a>
+  </div>
+  <div *ngIf="!family" class="flex">
+    <a [routerLink]="[person.id]" class="relative">
+      <div class="h-12 w-px absolute bg-gray-300 left-1/2 -top-12"></div>
+      <app-person-card [person]="person"></app-person-card>
+    </a>
+  </div>
+  <div class="flex justify-center mx-24 gap-x-12 mt-12">
+    <app-family-diagram
+      *ngFor="let child of family?.children"
+      [parentPersonId]="personId"
+      [personId]="child"
+    ></app-family-diagram>
+  </div>
+</div>
