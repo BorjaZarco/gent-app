@@ -26,7 +26,10 @@
           shadow
         "
       ></i>
-      <div class="h-32 w-px absolute bg-gray-300 left-1/2 -bottom-12"></div>
+      <div
+        *ngIf="family?.children?.length"
+        class="h-32 w-px absolute bg-gray-300 left-1/2 -bottom-12"
+      ></div>
     </div>
     <a [routerLink]="[wife.id]" class="relative">
       <div
