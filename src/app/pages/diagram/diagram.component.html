@@ -1,0 +1,30 @@
+<div class="relative overflow-hidden h-screen w-screen">
+  <div class="absolute top-4 left-6 shadow z-10 flex">
+    <p-dropdown
+      class="h-16 w-44"
+      styleClass="border-0 h-full w-full items-center"
+      [options]="familyTops"
+      [(ngModel)]="selectedTop"
+      optionLabel="husband"
+    ></p-dropdown>
+    <div class="h-16 w-px bg-gray-100"></div>
+    <p-autoComplete
+      class="w-96"
+      styleClass="h-16 w-full"
+      inputStyleClass="h-full w-full border-0  rounded-none outline-none"
+      [suggestions]="people"
+      placeholder="Pincha aquí para buscar"
+    ></p-autoComplete>
+  </div>
+  <aside
+    [ngClass]="{ '-right-1/4': !selectedPerson }"
+    class="absolute h-screen right-4 top-0 p-4 w-1/4 duration-300 z-10 flex"
+  >
+    <div class="shadow h-full bg-white w-full">
+      <router-outlet></router-outlet>
+    </div>
+  </aside>
+  <div class="flex h-screen w-screen overflow-scroll p-24" *ngIf="selectedTop">
+    <app-family-diagram [personId]="selectedTop?.husband"></app-family-diagram>
+  </div>
+</div>
