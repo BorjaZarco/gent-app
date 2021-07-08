@@ -1,6 +1,6 @@
 <div
+  [id]="'person-card-' + person.id"
   class="
-    shadow
     relative
     rounded
     w-48
@@ -9,16 +9,29 @@
     justify-end
     cursor-pointer
     overflow-hidden
+    shadow
+    hover:shadow-md
+    duration-300
   "
+  pRipple
 >
   <div
-    class="h-3/5 w-50"
+    class="h-3/5 w-full relative"
     [ngStyle]="{
       'background-image': 'url(' + 'https://picsum.photos/200/300' + ')'
     }"
-  ></div>
-  <div class="h-2/5 p-2">
+  >
+    <div
+      *ngIf="person.dead"
+      class="absolute top-0 left-0 h-full w-full opacity-50 bg-black"
+    ></div>
+  </div>
+  <div class="h-2/5 p-2 text-center text-sm">
+    <p>
+      {{ person.birthDate || "-" | moment }}
+      {{ person.dead ? "-" : "" }}
+      {{ person.dead ? (person.deathDate || "?" | moment) : "" }}
+    </p>
     <p>{{ person.name | titlecase }} {{ person.surname | titlecase }}</p>
-    <p>{{ person.birthDate }}</p>
   </div>
 </div>
