@@ -6,7 +6,7 @@
   >
     <a [routerLink]="[husband.id]" class="relative">
       <div
-        *ngIf="husband?.id === person?.id"
+        *ngIf="parentPersonId && husband?.id === person?.id"
         class="h-12 w-px absolute bg-gray-300 left-1/2 -top-12"
       ></div>
       <app-person-card [person]="husband"></app-person-card>
@@ -33,7 +33,7 @@
     </div>
     <a [routerLink]="[wife.id]" class="relative">
       <div
-        *ngIf="wife?.id === person?.id"
+        *ngIf="parentPersonId && wife?.id === person?.id"
         class="h-12 w-px absolute bg-gray-300 left-1/2 -top-12"
       ></div>
       <app-person-card [person]="wife"></app-person-card>
