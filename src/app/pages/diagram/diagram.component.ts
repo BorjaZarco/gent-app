@@ -33,7 +33,8 @@ export class DiagramComponent implements OnInit {
     this.people = this.peopleService.getPeople();
     this.familyTops = this.familyService.getFamilyTops();
     this.selectedTop = this.familyTops[0];
-    this.selectedPerson = this.route.firstChild?.snapshot?.paramMap?.get('id');
+    const newSelectedPersonId =
+      this.route.firstChild?.snapshot?.paramMap?.get('id');
     this.router.events
       .pipe(
         filter((event) => event instanceof ActivationEnd),
@@ -48,15 +49,55 @@ export class DiagramComponent implements OnInit {
         })
       )
       .subscribe((params) => {
-        this.selectedPerson = params?.get('id');
+        const newSelectedPersonId = params?.get('id');
+        this.onPersonSelected(newSelectedPersonId);
       });
+    setTimeout(() => {
+      this.onPersonSelected(newSelectedPersonId);
+    }, 500);
   }
 
-  onSelectPerson(selectedPerson: any) {
-    if (this.selectedPerson?.id === selectedPerson?.id) {
+  onPersonSelected(newSelectedPersonId?: string): void {
+    if (!newSelectedPersonId) {
       this.selectedPerson = null;
-    } else {
-      this.selectedPerson = selectedPerson;
+      return;
     }
+
+    const selectedPersonCard = document.getElementById(
+      `person-card-${newSelectedPersonId}`
+    );
+    const diagramCanvas = document.getElementById(`diagram-canvas`);
+    const offset = this.getElementOffset(selectedPersonCard, diagramCanvas);
+    diagramCanvas.scroll({
+      top: offset.top,
+      left: offset.left,
+      behavior: 'smooth',
+    });
+
+    this.selectedPerson = newSelectedPersonId;
+  }
+
+  private getElementOffset(
+    element: HTMLElement,
+    container: HTMLElement
+  ): {
+    top: number;
+    left: number;
+  } {
+    const offset = {
+      top: element?.offsetTop || 0,
+      left: element?.offsetLeft || 0,
+    };
+    let parentElement = element?.offsetParent as HTMLElement;
+    while (parentElement && parentElement.id !== container.id) {
+      offset.top += parentElement.offsetTop;
+      offset.left += parentElement.offsetLeft;
+      parentElement = parentElement.offsetParent as HTMLElement;
+    }
+
+    // center element in container
+    offset.top -= container.offsetHeight / 2 - element.offsetHeight / 2;
+    offset.left -= container.offsetWidth / 2 - element.offsetWidth / 2;
+    return offset;
   }
 }

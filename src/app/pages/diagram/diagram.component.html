@@ -24,7 +24,11 @@
       <router-outlet></router-outlet>
     </div>
   </aside>
-  <div class="flex h-screen w-screen overflow-scroll p-24" *ngIf="selectedTop">
+  <div
+    id="diagram-canvas"
+    class="flex h-screen w-screen overflow-scroll p-24"
+    *ngIf="selectedTop"
+  >
     <app-family-diagram [personId]="selectedTop?.husband"></app-family-diagram>
   </div>
 </div>
