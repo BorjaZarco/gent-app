@@ -11,7 +11,7 @@
     <p-autoComplete
       class="w-96"
       styleClass="h-16 w-full"
-      inputStyleClass="h-full w-full border-0  rounded-none outline-none"
+      inputStyleClass="h-full w-full border-0 rounded-none outline-none"
       [suggestions]="people"
       placeholder="Pincha aquí para buscar"
     ></p-autoComplete>
@@ -20,7 +20,7 @@
     [ngClass]="{ '-right-1/4': !selectedPerson }"
     class="absolute h-screen right-4 top-0 p-4 w-1/4 duration-300 z-10 flex"
   >
-    <div class="shadow h-full bg-white w-full">
+    <div class="shadow h-full bg-white w-full rounded">
       <router-outlet></router-outlet>
     </div>
   </aside>

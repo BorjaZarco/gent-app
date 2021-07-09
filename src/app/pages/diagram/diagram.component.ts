@@ -67,6 +67,10 @@ export class DiagramComponent implements OnInit {
       `person-card-${newSelectedPersonId}`
     );
     const diagramCanvas = document.getElementById(`diagram-canvas`);
+    if (!selectedPersonCard || !diagramCanvas) {
+      return;
+    }
+
     const offset = this.getElementOffset(selectedPersonCard, diagramCanvas);
     diagramCanvas.scroll({
       top: offset.top,
