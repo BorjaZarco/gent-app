@@ -3,18 +3,30 @@
     <p-dropdown
       class="h-16 w-44"
       styleClass="border-0 h-full w-full items-center"
-      [options]="familyTops"
+      [options]="familyTopsToDisplay"
       [(ngModel)]="selectedTop"
-      optionLabel="husband"
+      optionLabel="familyName"
     ></p-dropdown>
     <div class="h-16 w-px bg-gray-100"></div>
     <p-autoComplete
       class="w-96"
       styleClass="h-16 w-full"
       inputStyleClass="h-full w-full border-0 rounded-none outline-none"
-      [suggestions]="people"
+      [suggestions]="filteredPeople"
+      (completeMethod)="onSearch($event)"
+      (onSelect)="onSelectPerson($event)"
+      [forceSelection]="true"
+      field="fullname"
+      dataKey="id"
       placeholder="Pincha aquí para buscar"
-    ></p-autoComplete>
+    >
+      <ng-template let-person pTemplate="item">
+        <div class="flex justify-between">
+          <p><span></span>{{ person.fullname | titlecase }}</p>
+          <p class="text-right text-gray-300">F. {{ person.familyName }}</p>
+        </div>
+      </ng-template>
+    </p-autoComplete>
   </div>
   <aside
     [ngClass]="{ '-right-1/4': !selectedPerson }"

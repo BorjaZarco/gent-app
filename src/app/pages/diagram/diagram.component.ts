@@ -1,3 +1,4 @@
+import { TitleCasePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ActivationEnd, Router } from '@angular/router';
 import { of } from 'rxjs';
@@ -14,6 +15,12 @@ import { Person } from 'src/app/types/definitions/person';
 })
 export class DiagramComponent implements OnInit {
   people: Person[] = [];
+  filteredPeople: {
+    fullname: string;
+    id: string;
+    familyId: string;
+    familyName: string;
+  }[] = [];
   families: Family[] = [];
 
   familyTops: Family[] = [];
@@ -21,18 +28,33 @@ export class DiagramComponent implements OnInit {
   selectedPerson = null;
   selectedTop: Family;
   displayPersonData: boolean;
+  familyTopsToDisplay: (Family & { familyName: string })[];
 
   constructor(
     private peopleService: PeopleService,
     private familyService: FamilyService,
     private route: ActivatedRoute,
+    private titlecase: TitleCasePipe,
     private router: Router
   ) {}
 
   ngOnInit() {
     this.people = this.peopleService.getPeople();
     this.familyTops = this.familyService.getFamilyTops();
+    this.familyTopsToDisplay = this.familyTops.map((familyTop) => {
+      const husband = this.peopleService.getPerson(familyTop.husband);
+      const wife = this.peopleService.getPerson(familyTop.wife);
+      const familyName = `${(husband?.surname || '').split(' ')[0]} ${
+        (wife?.surname || '').split(' ')[0]
+      } `;
+      return { ...familyTop, familyName };
+    });
     this.selectedTop = this.familyTops[0];
+    this.subscribeToPersonSelection();
+    this.onSearch();
+  }
+
+  subscribeToPersonSelection() {
     const newSelectedPersonId =
       this.route.firstChild?.snapshot?.paramMap?.get('id');
     this.router.events
@@ -81,6 +103,43 @@ export class DiagramComponent implements OnInit {
     this.selectedPerson = newSelectedPersonId;
   }
 
+  onSearch(event = { query: '' }) {
+    const queryStr = event.query || '';
+
+    this.filteredPeople = this.people.reduce((parsedPeople, person) => {
+      const parsedPerson = {
+        id: person.id,
+        fullname: this.titlecase.transform(
+          `${person.name} ${person.surname}`.trim()
+        ),
+      };
+
+      if (
+        parsedPerson.fullname.toLowerCase().includes(queryStr.toLowerCase())
+      ) {
+        const familyTops = this.familyService.getPersonFamilyTops(person);
+        familyTops.forEach((familyTop) => {
+          const husband = this.peopleService.getPerson(familyTop.husband);
+          const wife = this.peopleService.getPerson(familyTop.wife);
+          const familyName = `${(husband?.surname || '').split(' ')[0]} ${
+            (wife?.surname || '').split(' ')[0]
+          } `;
+          const personData = {
+            ...parsedPerson,
+            familyId: familyTop.id,
+            familyName: this.titlecase.transform(familyName.trim()),
+          };
+          parsedPeople.push(personData);
+        });
+      }
+      return parsedPeople;
+    }, []);
+  }
+
+  onSelectPerson(event) {
+    console.log(event);
+  }
+
   private getElementOffset(
     element: HTMLElement,
     container: HTMLElement
@@ -100,8 +159,8 @@ export class DiagramComponent implements OnInit {
     }
 
     // center element in container
-    offset.top -= container.offsetHeight / 2 - element.offsetHeight / 2;
-    offset.left -= container.offsetWidth / 2 - element.offsetWidth / 2;
+    offset.top -= container.offsetHeight / 2 - element.offsetHeight;
+    offset.left -= container.offsetWidth / 2 - element.offsetWidth;
     return offset;
   }
 }
