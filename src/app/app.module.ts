@@ -1,3 +1,4 @@
+import { TitleCasePipe } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -41,7 +42,7 @@ import { ObjectPipe } from './pipes/object.pipe';
     RippleModule,
     DropdownModule,
   ],
-  providers: [ObjectPipe],
+  providers: [ObjectPipe, TitleCasePipe],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
