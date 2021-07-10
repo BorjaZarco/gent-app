@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as db from '../../assets/db.json';
 import { Family } from '../types/definitions/family';
+import { Person } from '../types/definitions/person';
 
 @Injectable({
   providedIn: 'root',
@@ -43,18 +44,53 @@ export class FamilyService {
   getFamilyTops(): Family[] {
     const families = this.getFamilies();
     return families.filter((possibleTop) => {
-      const husbandFamily = families.find((family) =>
-        (family.children || []).includes(possibleTop.husband)
-      );
-      const wifeFamily = families.find((family) =>
-        (family.children || []).includes(possibleTop.wife)
-      );
+      const husbandFamily = this.getAscendanceFamily(possibleTop.husband);
+      const wifeFamily = this.getAscendanceFamily(possibleTop.wife);
 
       return !husbandFamily && !wifeFamily;
     });
   }
 
-  getCurrentPersonFamily(id: any, sex: any): Family {
+  getPersonFamilyTops(person: Person): Family[] {
+    const personFamily = this.getAscendanceFamily(person.id);
+
+    const familyTops = personFamily
+      ? this.getFamilyAscendanceRecursive([], personFamily)
+      : this.getPersonFamily(person.id, person.sex);
+
+    const uniqueFamilyTops = (familyTops || []).reduce((uniques, family) => {
+      uniques[family.id] = family;
+      return uniques;
+    }, {});
+    return Object.values(uniqueFamilyTops);
+  }
+
+  getFamilyAscendanceRecursive(familyTops: Family[], family: Family): Family[] {
+    const husbandFamily = this.getAscendanceFamily(family.husband);
+    const wifeFamily = this.getAscendanceFamily(family.wife);
+    const hasNoAscendance = !husbandFamily && !wifeFamily;
+    if (hasNoAscendance) {
+      return [family];
+    } else {
+      if (husbandFamily) {
+        const husbandTop = this.getFamilyAscendanceRecursive(
+          familyTops,
+          husbandFamily
+        );
+        familyTops = familyTops.concat(husbandTop);
+      }
+      if (wifeFamily) {
+        const wifeTop = this.getFamilyAscendanceRecursive(
+          familyTops,
+          wifeFamily
+        );
+        familyTops = familyTops.concat(wifeTop);
+      }
+      return familyTops;
+    }
+  }
+
+  getCurrentPersonFamily(id: string, sex: 'M' | 'F'): Family {
     const allFamilies = this.getPersonFamily(id, sex);
     return allFamilies.length === 1
       ? allFamilies[0]
