@@ -136,8 +136,17 @@ export class DiagramComponent implements OnInit {
     }, []);
   }
 
-  onSelectPerson(event) {
-    console.log(event);
+  onSelectPerson(selection: {
+    fullname: string;
+    id: string;
+    familyId: string;
+    familyName: string;
+  }) {
+    if (selection.familyId !== this.selectedTop.id) {
+      this.selectedTop = this.familyService.getFamily(selection.familyId);
+    }
+
+    this.router.navigate([selection.id]);
   }
 
   private getElementOffset(
