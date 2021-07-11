@@ -4,8 +4,9 @@ import { DiagramDetailsComponent } from './pages/diagram/diagram-details/diagram
 import { DiagramComponent } from './pages/diagram/diagram.component';
 
 const routes: Routes = [
+  { path: '', redirectTo: 'diagram', pathMatch: 'full' },
   {
-    path: '',
+    path: 'diagram',
     component: DiagramComponent,
     children: [{ path: ':id', component: DiagramDetailsComponent }],
   },
