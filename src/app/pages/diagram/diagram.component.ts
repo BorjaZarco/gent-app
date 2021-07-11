@@ -30,7 +30,7 @@ export class DiagramComponent implements OnInit {
   displayPersonData: boolean;
   familyTopsToDisplay: (Family & { familyName: string })[];
 
-  queryStr: string;
+  query: string;
 
   constructor(
     private peopleService: PeopleService,
@@ -106,7 +106,7 @@ export class DiagramComponent implements OnInit {
   }
 
   onSearch(event = { query: '' }) {
-    this.queryStr = event.query || '';
+    const queryStr = event.query || '';
 
     this.filteredPeople = this.people.reduce((parsedPeople, person) => {
       const parsedPerson = {
@@ -117,9 +117,7 @@ export class DiagramComponent implements OnInit {
       };
 
       if (
-        parsedPerson.fullname
-          .toLowerCase()
-          .includes(this.queryStr.toLowerCase())
+        parsedPerson.fullname.toLowerCase().includes(queryStr.toLowerCase())
       ) {
         const familyTops = this.familyService.getPersonFamilyTops(person);
         familyTops.forEach((familyTop) => {
@@ -138,6 +136,10 @@ export class DiagramComponent implements OnInit {
       }
       return parsedPeople;
     }, []);
+  }
+
+  onClearSearch() {
+    this.query = '';
   }
 
   onSelectPerson(selection: {

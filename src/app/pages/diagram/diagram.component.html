@@ -13,21 +13,39 @@
       class="w-96"
       styleClass="h-16 w-full"
       inputStyleClass="h-full w-full border-0 rounded-none outline-none"
+      [(ngModel)]="query"
       [suggestions]="filteredPeople"
       (completeMethod)="onSearch($event)"
       (onSelect)="onSelectPerson($event)"
-      [forceSelection]="true"
+      [showEmptyMessage]="true"
+      emptyMessage="No se encontraron resultados"
       field="fullname"
       dataKey="id"
       placeholder="Pincha aquí para buscar"
     >
       <ng-template let-person pTemplate="item">
         <div class="flex justify-between">
-          <div [innerHtml]="person.fullname | highlight: queryStr"></div>
+          <div [innerHtml]="person.fullname | highlight: query"></div>
           <p class="text-right text-gray-300">F. {{ person.familyName }}</p>
         </div>
       </ng-template>
     </p-autoComplete>
+    <div class="w-16 flex justify-center items-center bg-white">
+      <button
+        pButton
+        pRipple
+        type="button"
+        icon="pi pi-times"
+        class="
+          p-button-rounded p-button-plain p-button-text
+          w-12
+          h-12
+          absolute
+          right-4
+        "
+        (click)="onClearSearch()"
+      ></button>
+    </div>
   </div>
   <aside
     [ngClass]="{ '-right-1/4': !selectedPerson }"
