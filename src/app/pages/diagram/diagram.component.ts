@@ -148,6 +148,10 @@ export class DiagramComponent implements OnInit {
   }) {
     if (selection.familyId !== this.selectedTop.id) {
       this.selectedTop = this.familyService.getFamily(selection.familyId);
+      setTimeout(() => {
+        this.router.navigate([selection.id]);
+      }, 500);
+      return;
     }
 
     this.router.navigate([selection.id]);
