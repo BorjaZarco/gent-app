@@ -16,19 +16,21 @@ import { Person } from 'src/app/types/definitions/person';
 export class DiagramComponent implements OnInit {
   people: Person[] = [];
   filteredPeople: {
-    fullname: string;
     id: string;
+    fullname: string;
+    splittedFullName?: string[];
     familyId: string;
     familyName: string;
   }[] = [];
   families: Family[] = [];
-
   familyTops: Family[] = [];
 
   selectedPerson = null;
   selectedTop: Family;
   displayPersonData: boolean;
   familyTopsToDisplay: (Family & { familyName: string })[];
+
+  queryStr: string;
 
   constructor(
     private peopleService: PeopleService,
@@ -104,7 +106,7 @@ export class DiagramComponent implements OnInit {
   }
 
   onSearch(event = { query: '' }) {
-    const queryStr = event.query || '';
+    this.queryStr = event.query || '';
 
     this.filteredPeople = this.people.reduce((parsedPeople, person) => {
       const parsedPerson = {
@@ -115,7 +117,9 @@ export class DiagramComponent implements OnInit {
       };
 
       if (
-        parsedPerson.fullname.toLowerCase().includes(queryStr.toLowerCase())
+        parsedPerson.fullname
+          .toLowerCase()
+          .includes(this.queryStr.toLowerCase())
       ) {
         const familyTops = this.familyService.getPersonFamilyTops(person);
         familyTops.forEach((familyTop) => {
