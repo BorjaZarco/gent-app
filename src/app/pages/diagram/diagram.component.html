@@ -1,7 +1,7 @@
 <div class="relative overflow-hidden h-screen w-screen">
   <div class="absolute top-4 left-6 shadow z-10 flex">
     <p-dropdown
-      class="h-16 w-44"
+      class="h-16 w-48"
       styleClass="border-0 h-full w-full items-center"
       [options]="familyTopsToDisplay"
       [(ngModel)]="selectedTop"
@@ -23,7 +23,7 @@
     >
       <ng-template let-person pTemplate="item">
         <div class="flex justify-between">
-          <p><span></span>{{ person.fullname | titlecase }}</p>
+          <div [innerHtml]="person.fullname | highlight: queryStr"></div>
           <p class="text-right text-gray-300">F. {{ person.familyName }}</p>
         </div>
       </ng-template>
