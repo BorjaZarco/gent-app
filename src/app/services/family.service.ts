@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import * as db from '../../assets/db.json';
 import { Family } from '../types/definitions/family';
 import { Person } from '../types/definitions/person';
 
@@ -7,8 +6,12 @@ import { Person } from '../types/definitions/person';
   providedIn: 'root',
 })
 export class FamilyService {
-  families = db['families'] || {};
+  families: Record<string, Family>;
   constructor() {}
+
+  loadFamilies(familiesToLoad = {}) {
+    this.families = familiesToLoad;
+  }
 
   getFamilies(): Family[] {
     return Object.values(this.families);
