@@ -77,7 +77,24 @@ export class DiagramComponent implements OnInit {
         this.onPersonSelected(newSelectedPersonId);
       });
     setTimeout(() => {
-      this.onPersonSelected(newSelectedPersonId);
+      if (newSelectedPersonId) {
+        this.onPersonSelected(newSelectedPersonId);
+      } else if (this.selectedTop) {
+        const selectedPersonCard = document.getElementById(
+          `person-card-${this.selectedTop.husband}`
+        );
+        const diagramCanvas = document.getElementById(`diagram-canvas`);
+        if (!selectedPersonCard || !diagramCanvas) {
+          return;
+        }
+
+        const offset = this.getElementOffset(selectedPersonCard, diagramCanvas);
+        diagramCanvas.scroll({
+          top: offset.top,
+          left: offset.left,
+          behavior: 'smooth',
+        });
+      }
     }, 500);
   }
 
