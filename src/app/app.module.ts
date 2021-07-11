@@ -18,6 +18,7 @@ import { ListComponent } from './pages/list/list.component';
 import { ArrayObjectPipe } from './pipes/array-object.pipe';
 import { MomentPipe } from './pipes/moment.pipe';
 import { ObjectPipe } from './pipes/object.pipe';
+import { HighlightPipe } from './pipes/highlight.pipe';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { ObjectPipe } from './pipes/object.pipe';
     DiagramDetailsComponent,
     ObjectPipe,
     ArrayObjectPipe,
+    HighlightPipe,
   ],
   imports: [
     BrowserModule,
