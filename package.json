@@ -21,6 +21,7 @@
     "@angular/platform-browser-dynamic": "~10.2.0",
     "@angular/router": "~10.2.0",
     "aos": "^2.3.4",
+    "ngx-ui-loader": "^11.0.0",
     "postcss": "^8.1.9",
     "primeicons": "^4.1.0",
     "primeng": "^11.1.0",

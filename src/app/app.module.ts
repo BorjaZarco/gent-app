@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgxUiLoaderModule } from 'ngx-ui-loader';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { ButtonModule } from 'primeng/button';
 import { DropdownModule } from 'primeng/dropdown';
@@ -16,9 +17,9 @@ import { DiagramDetailsComponent } from './pages/diagram/diagram-details/diagram
 import { DiagramComponent } from './pages/diagram/diagram.component';
 import { ListComponent } from './pages/list/list.component';
 import { ArrayObjectPipe } from './pipes/array-object.pipe';
+import { HighlightPipe } from './pipes/highlight.pipe';
 import { MomentPipe } from './pipes/moment.pipe';
 import { ObjectPipe } from './pipes/object.pipe';
-import { HighlightPipe } from './pipes/highlight.pipe';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { HighlightPipe } from './pipes/highlight.pipe';
     BrowserAnimationsModule,
     FormsModule,
     AppRoutingModule,
+    NgxUiLoaderModule,
     AutoCompleteModule,
     ButtonModule,
     RippleModule,
