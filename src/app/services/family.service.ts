@@ -38,6 +38,7 @@ export class FamilyService {
     }
     await this.dataService.storeData('families', families);
     this.loadFamilies(families);
+    return families;
   }
 
   getFamilies(): Family[] {

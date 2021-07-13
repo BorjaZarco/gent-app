@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ActivationEnd, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { filter, switchMap } from 'rxjs/operators';
+import { DialogService } from 'src/app/services/dialog.service';
 import { FamilyService } from 'src/app/services/family.service';
 import { LoaderService } from 'src/app/services/loader.service';
 import { PeopleService } from 'src/app/services/people.service';
@@ -41,6 +42,7 @@ export class DiagramComponent implements OnInit {
     private route: ActivatedRoute,
     private titlecase: TitleCasePipe,
     private router: Router,
+    private dialog: DialogService,
     private loader: LoaderService
   ) {}
 
@@ -201,6 +203,9 @@ export class DiagramComponent implements OnInit {
         0
       );
       if (!file) {
+        this.dialog.displayError(
+          'No se ha seleccionado ningún fichero, inténtelo más tarde'
+        );
         return;
       }
       const fileExtension = (file.name || '').split('.').slice(-1)[0];
@@ -209,18 +214,27 @@ export class DiagramComponent implements OnInit {
         !ALLOWED_FILES.some((fileType) => fileExtension === fileType)
       ) {
         console.error('No es un archivo válido!');
+        this.dialog.displayError(
+          'No se ha seleccionado un fichero válido. Solo se aceptan archivos GEDCOM 1.0 (.ged)'
+        );
         return;
       }
 
       const content = await this.readGedFile(file);
 
-      await this.familyService.loadFamiliesFromFile(content);
-      await this.peopleService.loadPeopleFromFile(content);
+      const families = await this.familyService.loadFamiliesFromFile(content);
+      const people = await this.peopleService.loadPeopleFromFile(content);
       ((event as Event).target as HTMLInputElement).value = '';
 
+      this.dialog.displaySuccess(
+        `Se han importado ${Object.keys(families).length} familias y ${
+          Object.keys(people).length
+        } personas correctamente`
+      );
       this.ngOnInit();
     } catch (error) {
       console.error(error);
+      this.dialog.displayError();
     } finally {
       this.loader.stopLoader();
     }

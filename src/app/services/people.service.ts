@@ -38,6 +38,7 @@ export class PeopleService {
     }
     await this.dataService.storeData('people', people);
     this.loadPeople(people);
+    return people;
   }
 
   getPeople(): Person[] {
