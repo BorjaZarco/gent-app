@@ -20,6 +20,8 @@ import { ArrayObjectPipe } from './pipes/array-object.pipe';
 import { HighlightPipe } from './pipes/highlight.pipe';
 import { MomentPipe } from './pipes/moment.pipe';
 import { ObjectPipe } from './pipes/object.pipe';
+import { FamilyService } from './services/family.service';
+import { PeopleService } from './services/people.service';
 
 @NgModule({
   declarations: [
@@ -46,7 +48,7 @@ import { ObjectPipe } from './pipes/object.pipe';
     RippleModule,
     DropdownModule,
   ],
-  providers: [ObjectPipe, TitleCasePipe],
+  providers: [ObjectPipe, TitleCasePipe, PeopleService, FamilyService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
