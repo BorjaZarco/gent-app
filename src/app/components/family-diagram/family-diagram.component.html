@@ -1,6 +1,6 @@
 <div class="flex flex-col" [id]="'FAM' + personId">
   <div *ngIf="family" class="flex justify-center pb-12 relative border-b-2">
-    <a [routerLink]="[husband.id]" class="relative">
+    <a [routerLink]="[husband?.id]" class="relative">
       <div
         *ngIf="parentPersonId && husband?.id === person?.id"
         class="h-12 w-px absolute bg-gray-300 left-1/2 -top-12"
@@ -27,7 +27,7 @@
         class="h-32 w-px absolute bg-gray-300 left-1/2 -bottom-12"
       ></div>
     </div>
-    <a [routerLink]="[wife.id]" class="relative">
+    <a [routerLink]="[wife?.id]" class="relative">
       <div
         *ngIf="parentPersonId && wife?.id === person?.id"
         class="h-12 w-px absolute bg-gray-300 left-1/2 -top-12"

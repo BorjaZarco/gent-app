@@ -1,5 +1,5 @@
 <div
-  [id]="'person-card-' + person.id"
+  [id]="'person-card-' + person?.id"
   class="
     relative
     rounded
@@ -22,16 +22,16 @@
     }"
   >
     <div
-      *ngIf="person.dead"
+      *ngIf="person?.dead"
       class="absolute top-0 left-0 h-full w-full opacity-50 bg-black"
     ></div>
   </div>
   <div class="h-2/5 p-2 text-center text-sm">
     <p>
-      {{ person.birthDate || "-" | moment }}
-      {{ person.dead ? "-" : "" }}
-      {{ person.dead ? (person.deathDate || "?" | moment) : "" }}
+      {{ person?.birthDate || "-" | moment }}
+      {{ person?.dead ? "-" : "" }}
+      {{ person?.dead ? (person?.deathDate || "?" | moment) : "" }}
     </p>
-    <p>{{ person.name | titlecase }} {{ person.surname | titlecase }}</p>
+    <p>{{ person?.name | titlecase }} {{ person?.surname | titlecase }}</p>
   </div>
 </div>
