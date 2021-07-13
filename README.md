@@ -2,6 +2,8 @@
 
 Este es un proyecto surge por la lamentable desaparición de [Genoom](https://www.genoom.com/). Se trata de una visor de documentos [GEDCOM](https://es.wikipedia.org/wiki/GEDCOM). Surge como una alternativa libre y sencilla a las ya existentes.
 
+Por último, me gustaría dedicar este proyecto a Virín. Gracias por todo, abuela, espero que te guste😊
+
 ## Instalación
 
 Para la instalación del proyecto, es necesario descargar una de las versiones existentes y [disponibles en el repositorio](https://github.com/BorjaZarco/gent-app/releases). Tras la descarga, se debe de descomprimir el paquete para poder acceder a los ficheros que contienen el código y una build de la aplicación para dispositivos Windows.
@@ -42,6 +44,8 @@ En el proceso de diseño de la interfaz de la aplicación se ha tenido muy en cu
 
 ![walthrough](./public/walkthrough.gif)
 
+Para probar este proyecto se pueden descargar el archivo GEDCOM de prueba que se encuentra en [este repositorio](./public/demo.ged).
+
 ## Tecnologías
 
 Se ha implementado el proyecto en [Angular](https://angular.io/) dado su gran potencial para crear aplicaciones web. Además, se ha empleado [Electron](https://www.electronjs.org/) para evitar el uso de servidores o bases de datos externas. Esta decisión viene motivada de la decisión de dejar el código completo del proyecto de forma visbile y libre. De esta manera, se evitan posibles brechas de seguridad que permitan el acceso a datos de diferentes usuarios de la aplicación. Además, permite que el proyecto sea usado libremente y adaptado a cualquier tecnolgía de forma fácil. El listado completo de dependencias se muestra a continuación:
@@ -51,3 +55,7 @@ Se ha implementado el proyecto en [Angular](https://angular.io/) dado su gran po
 - [PrimeNG](https://www.primefaces.org/primeng/)
 - [TailwindCSS](https://tailwindcss.com/)
 - [SweetAlert](https://sweetalert2.github.io/)
+
+```
+
+```
