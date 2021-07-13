@@ -28,7 +28,7 @@
   </div>
   <div class="h-2/5 p-2 text-center text-sm">
     <p>
-      {{ person?.birthDate || "-" | moment }}
+      {{ person?.birthDate || "?" | moment }}
       {{ person?.dead ? "-" : "" }}
       {{ person?.dead ? (person?.deathDate || "?" | moment) : "" }}
     </p>
