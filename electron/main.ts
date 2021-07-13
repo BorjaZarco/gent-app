@@ -7,9 +7,13 @@ let mainWindow;
 function createWindow() {
   mainWindow = new BrowserWindow({
     autoHideMenuBar: true,
+
     webPreferences: {
       nodeIntegration: true,
+      nodeIntegrationInWorker: true,
+      backgroundThrottling: false,
       enableRemoteModule: true,
+      contextIsolation: false,
     },
   });
   console.log(__dirname);
@@ -40,7 +44,6 @@ app.on('activate', () => {
 ipcMain.handle('loadData', async (event, fileName) => {
   const userDataPath = app.getPath('userData');
   const filePath = path.join(userDataPath, `${fileName}.json`);
-
   const data = fs.readFileSync(filePath, { encoding: 'utf-8' });
   return data.length > 0 ? JSON.parse(data) : null;
 });
@@ -48,6 +51,6 @@ ipcMain.handle('loadData', async (event, fileName) => {
 ipcMain.handle('storeData', async (event, fileName, data) => {
   const userDataPath = app.getPath('userData');
   const filePath = path.join(userDataPath, `${fileName}.json`);
-  fs.writeFileSync(filePath, data);
+  fs.writeFileSync(filePath, JSON.stringify(data));
   return true;
 });
