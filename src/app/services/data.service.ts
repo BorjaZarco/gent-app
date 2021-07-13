@@ -8,13 +8,20 @@ export class DataService {
   constructor(private electronService: ElectronService) {}
 
   public loadData<T>(dataName: string): Promise<Record<string, T>> {
-    console.log(this.electronService);
-
-    return this.electronService.ipcRenderer.invoke('loadData', dataName);
+    return this.electronService.isElectronApp
+      ? this.electronService.ipcRenderer.invoke('loadData', dataName)
+      : JSON.parse(localStorage.getItem(dataName) || '');
   }
 
   public storeData(dataName: string, data: any): Promise<boolean> {
-    console.log(this.electronService);
-    return this.electronService.ipcRenderer.invoke('storeData', dataName, data);
+    if (this.electronService.isElectronApp) {
+      return this.electronService.ipcRenderer.invoke(
+        'storeData',
+        dataName,
+        data
+      );
+    } else {
+      localStorage.setItem(dataName, JSON.stringify(data));
+    }
   }
 }
