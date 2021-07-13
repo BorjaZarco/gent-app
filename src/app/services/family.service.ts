@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Family } from '../types/definitions/family';
 import { Person } from '../types/definitions/person';
+import { DataService } from './data.service';
 import { UtilsService } from './utils.service';
 
 @Injectable({
@@ -8,13 +9,24 @@ import { UtilsService } from './utils.service';
 })
 export class FamilyService {
   families: Record<string, Family>;
-  constructor(private utils: UtilsService) {}
+  constructor(private utils: UtilsService, private dataService: DataService) {}
 
   loadFamilies(familiesToLoad = {}) {
     this.families = familiesToLoad;
   }
 
-  loadFamiliesFromFile(file: string = '') {
+  familiesLoaded(): boolean {
+    return !!this.families && Object.keys(this.families).length > 0;
+  }
+
+  async loadFamiliesLocalDB() {
+    const families = await this.dataService.loadData('families');
+    console.log(families);
+
+    this.loadFamilies(families);
+  }
+
+  async loadFamiliesFromFile(file: string = '') {
     const families: { [key: string]: any } = {};
     const familyRegex = /0 @(\w)+@ FAM/g;
     const familiesIdx = [...file.matchAll(familyRegex)].map((m) => m.index);
@@ -26,11 +38,8 @@ export class FamilyService {
       const parsedFamily = this.parseFamily(family);
       families[parsedFamily.id as string] = parsedFamily;
     }
+    await this.dataService.storeData('families', families);
     this.loadFamilies(families);
-  }
-
-  familiesLoaded(): boolean {
-    return !!this.families && Object.keys(this.families).length > 0;
   }
 
   getFamilies(): Family[] {

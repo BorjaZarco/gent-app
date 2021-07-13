@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgxElectronModule } from 'ngx-electron';
 import { NgxUiLoaderModule } from 'ngx-ui-loader';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { ButtonModule } from 'primeng/button';
@@ -47,6 +48,7 @@ import { PeopleService } from './services/people.service';
     ButtonModule,
     RippleModule,
     DropdownModule,
+    NgxElectronModule,
   ],
   providers: [ObjectPipe, TitleCasePipe, PeopleService, FamilyService],
   bootstrap: [AppComponent],

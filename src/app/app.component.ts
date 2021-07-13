@@ -10,6 +10,7 @@ import { PeopleService } from './services/people.service';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
+  dataLoaded = false;
   constructor(
     private primengConfig: PrimeNGConfig,
     private loader: LoaderService,
@@ -22,8 +23,17 @@ export class AppComponent implements OnInit {
     this.loadData();
   }
 
-  private loadData() {
-    this.loader.startLoader();
-    this.loader.stopLoader();
+  private async loadData() {
+    try {
+      this.loader.startLoader();
+      await Promise.all([
+        this.familyService.loadFamiliesLocalDB(),
+        this.peopleService.loadPeopleLocalDB(),
+      ]);
+    } catch (error) {
+    } finally {
+      this.dataLoaded = true;
+      this.loader.stopLoader();
+    }
   }
 }

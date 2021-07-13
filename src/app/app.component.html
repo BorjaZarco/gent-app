@@ -17,4 +17,4 @@
   textColor="#000000"
   textPosition="center-center"
 ></ngx-ui-loader>
-<router-outlet></router-outlet>
+<router-outlet *ngIf="dataLoaded"></router-outlet>

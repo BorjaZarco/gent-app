@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Person } from '../types/definitions/person';
+import { DataService } from './data.service';
 import { UtilsService } from './utils.service';
 
 @Injectable({
@@ -7,13 +8,22 @@ import { UtilsService } from './utils.service';
 })
 export class PeopleService {
   people: Record<string, Person>;
-  constructor(private utils: UtilsService) {}
+  constructor(private utils: UtilsService, private dataService: DataService) {}
 
   loadPeople(peopleToLoad = {}) {
     this.people = peopleToLoad;
   }
 
-  loadPeopleFromFile(content: string = '') {
+  peopleLoaded(): boolean {
+    return !!this.people && Object.keys(this.people).length > 0;
+  }
+
+  async loadPeopleLocalDB() {
+    const people = await this.dataService.loadData('people');
+    this.loadPeople(people);
+  }
+
+  async loadPeopleFromFile(content: string = '') {
     const people: { [key: string]: any } = {};
     const personRegex = /0 @(\w)+@ INDI/g;
     const peopleIdx = [...content.matchAll(personRegex)].map((m) => m.index);
@@ -26,11 +36,8 @@ export class PeopleService {
       const parsedPerson = this.parsePerson(person);
       people[parsedPerson.id as string] = parsedPerson;
     }
+    await this.dataService.storeData('people', people);
     this.loadPeople(people);
-  }
-
-  peopleLoaded(): boolean {
-    return !!this.people && Object.keys(this.people).length > 0;
   }
 
   getPeople(): Person[] {
