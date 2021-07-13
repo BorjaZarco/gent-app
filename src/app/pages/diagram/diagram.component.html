@@ -50,7 +50,8 @@
     </div>
   </div>
   <aside
-    [ngClass]="{ '-right-1/4': !selectedPerson }"
+    *ngIf="selectedTop"
+    [ngClass]="{ '-right-1/4': !selectedPersonId }"
     class="absolute h-screen right-4 top-0 p-4 w-1/4 duration-300 z-10 flex"
   >
     <div class="shadow h-full bg-white w-full rounded">
@@ -63,5 +64,35 @@
     *ngIf="selectedTop"
   >
     <app-family-diagram [personId]="selectedTop?.husband"></app-family-diagram>
+  </div>
+  <div
+    class="
+      flex
+      h-screen
+      w-screen
+      overflow-auto
+      p-24
+      justify-center
+      items-center
+      justify-col
+    "
+  >
+    <p>
+      No se han encontrado familias que mostrar. Comienza
+      <span>
+        <button
+          (click)="onSelectFile()"
+          class="text-blue-800 hover:text-blue-500 duration-300"
+        >
+          importando un fichero aquí.
+        </button>
+        <input
+          id="file-input"
+          type="file"
+          class="hidden"
+          (change)="onFileSelected($event)"
+        />
+      </span>
+    </p>
   </div>
 </div>

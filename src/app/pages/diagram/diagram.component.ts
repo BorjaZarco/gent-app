@@ -4,9 +4,12 @@ import { ActivatedRoute, ActivationEnd, Router } from '@angular/router';
 import { of } from 'rxjs';
 import { filter, switchMap } from 'rxjs/operators';
 import { FamilyService } from 'src/app/services/family.service';
+import { LoaderService } from 'src/app/services/loader.service';
 import { PeopleService } from 'src/app/services/people.service';
 import { Family } from 'src/app/types/definitions/family';
 import { Person } from 'src/app/types/definitions/person';
+
+const ALLOWED_FILES = ['ged'];
 
 @Component({
   selector: 'app-diagram',
@@ -25,7 +28,7 @@ export class DiagramComponent implements OnInit {
   families: Family[] = [];
   familyTops: Family[] = [];
 
-  selectedPerson = null;
+  selectedPersonId = null;
   selectedTop: Family;
   displayPersonData: boolean;
   familyTopsToDisplay: (Family & { familyName: string })[];
@@ -37,7 +40,8 @@ export class DiagramComponent implements OnInit {
     private familyService: FamilyService,
     private route: ActivatedRoute,
     private titlecase: TitleCasePipe,
-    private router: Router
+    private router: Router,
+    private loader: LoaderService
   ) {}
 
   ngOnInit() {
@@ -100,7 +104,7 @@ export class DiagramComponent implements OnInit {
 
   onPersonSelected(newSelectedPersonId?: string): void {
     if (!newSelectedPersonId) {
-      this.selectedPerson = null;
+      this.selectedPersonId = null;
       return;
     }
 
@@ -119,7 +123,7 @@ export class DiagramComponent implements OnInit {
       behavior: 'smooth',
     });
 
-    this.selectedPerson = newSelectedPersonId;
+    this.selectedPersonId = newSelectedPersonId;
   }
 
   onSearch(event = { query: '' }) {
@@ -167,13 +171,75 @@ export class DiagramComponent implements OnInit {
   }) {
     if (selection.familyId !== this.selectedTop.id) {
       this.selectedTop = this.familyService.getFamily(selection.familyId);
-      setTimeout(() => {
-        this.router.navigate([selection.id]);
-      }, 500);
+      if (this.selectedPersonId === selection.id) {
+        setTimeout(() => {
+          this.onPersonSelected(this.selectedPersonId);
+        }, 500);
+      } else {
+        setTimeout(() => {
+          this.router.navigate(['./', selection.id], {
+            relativeTo: this.route,
+          });
+        }, 500);
+      }
       return;
     }
 
-    this.router.navigate([selection.id]);
+    this.router.navigate(['./', selection.id], { relativeTo: this.route });
+  }
+
+  onSelectFile() {
+    const fileInput = document.getElementById('file-input');
+    fileInput.click();
+  }
+
+  async onFileSelected(event: FileList | Event) {
+    try {
+      this.loader.startLoader();
+      const file = ((event as Event)?.target as HTMLInputElement)?.files?.item(
+        0
+      );
+      if (!file) {
+        return;
+      }
+      const fileExtension = (file.name || '').split('.').slice(-1)[0];
+      if (
+        fileExtension &&
+        !ALLOWED_FILES.some((fileType) => fileExtension === fileType)
+      ) {
+        console.error('No es un archivo válido!');
+        return;
+      }
+
+      const content = await this.readGedFile(file);
+      this.familyService.loadFamiliesFromFile(content);
+      this.peopleService.loadPeopleFromFile(content);
+      ((event as Event).target as HTMLInputElement).value = '';
+
+      this.ngOnInit();
+    } catch (error) {
+      console.error(error);
+    } finally {
+      this.loader.stopLoader();
+    }
+  }
+
+  private readGedFile(file: File) {
+    return new Promise<string>((resolve, reject) => {
+      if (!file) {
+        resolve('');
+      }
+
+      const reader = new FileReader();
+
+      reader.onload = (e) => {
+        const rawText = reader.result.toString();
+        const text = rawText.replace(/\r/g, '');
+        resolve(text);
+      };
+
+      reader.readAsText(file);
+    });
   }
 
   private getElementOffset(

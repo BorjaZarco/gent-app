@@ -1,20 +1,40 @@
 import { Injectable } from '@angular/core';
 import { Family } from '../types/definitions/family';
 import { Person } from '../types/definitions/person';
+import { UtilsService } from './utils.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FamilyService {
   families: Record<string, Family>;
-  constructor() {}
+  constructor(private utils: UtilsService) {}
 
   loadFamilies(familiesToLoad = {}) {
     this.families = familiesToLoad;
   }
 
+  loadFamiliesFromFile(file: string = '') {
+    const families: { [key: string]: any } = {};
+    const familyRegex = /0 @(\w)+@ FAM/g;
+    const familiesIdx = [...file.matchAll(familyRegex)].map((m) => m.index);
+    for (let index = 0; index < familiesIdx.length - 1; index++) {
+      const currentFamily = familiesIdx[index];
+      const nextFamily = familiesIdx[index + 1] || 0;
+      const familyStr = file.slice(currentFamily, nextFamily - 1);
+      const family = familyStr.split('\n');
+      const parsedFamily = this.parseFamily(family);
+      families[parsedFamily.id as string] = parsedFamily;
+    }
+    this.loadFamilies(families);
+  }
+
+  familiesLoaded(): boolean {
+    return !!this.families && Object.keys(this.families).length > 0;
+  }
+
   getFamilies(): Family[] {
-    return Object.values(this.families);
+    return Object.values(this.families || []);
   }
 
   getFamily(id: string): Family {
@@ -98,5 +118,63 @@ export class FamilyService {
     return allFamilies.length === 1
       ? allFamilies[0]
       : (allFamilies || []).find((family) => !family?.divorce);
+  }
+
+  private parseFamily(familyData: string[]) {
+    const family: { [key: string]: string | boolean | string[] } = {};
+    familyData.forEach((row, i) => {
+      if (row.startsWith('0')) {
+        const [prefix, idx, _] = row.split('@');
+        family['id'] = idx;
+      } else if (row.startsWith('1 HUSB')) {
+        family['husband'] = row.replace('1 HUSB ', '').replace(/@/g, '');
+      } else if (row.startsWith('1 WIFE')) {
+        family['wife'] = row.replace('1 WIFE ', '').replace(/@/g, '');
+      } else if (row.startsWith('1 CHIL')) {
+        family['children'] = [
+          ...((family['children'] as string[]) || []),
+          row.replace('1 CHIL ', '').replace(/@/g, ''),
+        ];
+      } else if (row.startsWith('1 MARR')) {
+        family['marriage'] = true;
+        let j = 1;
+        let marriageInfoRow = familyData[i + j];
+        while (marriageInfoRow && marriageInfoRow.startsWith('2')) {
+          if (marriageInfoRow.startsWith('2 DATE')) {
+            family['marriageDate'] = this.utils.parseDate(
+              marriageInfoRow.replace('2 DATE ', '')
+            );
+          } else if (marriageInfoRow.startsWith('2 PLAC')) {
+            family['marriagePlace'] = marriageInfoRow.replace('2 PLAC ', '');
+          } else {
+            console.log('unhandled marriage data: ', row);
+          }
+          j++;
+          marriageInfoRow = familyData[i + j];
+        }
+      } else if (row.startsWith('1 DIV')) {
+        family['divorce'] = true;
+        let j = 1;
+        let divorceInfoRow = familyData[i + j];
+        while (divorceInfoRow && divorceInfoRow.startsWith('2')) {
+          if (divorceInfoRow.startsWith('2 DATE')) {
+            family['divorceDate'] = this.utils.parseDate(
+              divorceInfoRow.replace('2 DATE ', '')
+            );
+          } else if (divorceInfoRow.startsWith('2 PLAC')) {
+            family['divorcePlace'] = divorceInfoRow.replace('2 PLAC ', '');
+          } else {
+            console.log('unhandled divorce data: ', row);
+          }
+          j++;
+          divorceInfoRow = familyData[i + j];
+        }
+      } else {
+        if (!row.startsWith('2 PLAC') && !row.startsWith('2 DATE')) {
+          console.log('unhandled: ', row);
+        }
+      }
+    });
+    return family;
   }
 }
