@@ -1,27 +1,53 @@
 # Gent
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.2.0.
+Este es un proyecto surge por la lamentable desaparición de [Genoom](https://www.genoom.com/). Se trata de una visor de documentos [GEDCOM](https://es.wikipedia.org/wiki/GEDCOM). Surge como una alternativa libre y sencilla a las ya existentes.
 
-## Development server
+## Instalación
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Para la instalación del proyecto, es necesario descargar una de las versiones existentes y [disponibles en el repositorio](https://github.com/BorjaZarco/gent-app/releases). Tras la descarga, se debe de descomprimir el paquete para poder acceder a los ficheros que contienen el código y una build de la aplicación para dispositivos Windows.
 
-## Code scaffolding
+Como se ha mencionado anteriormente, la distribución contiene únicamente una versión ejecutable para sistemas Windows. Lamentablemente, ha sido imposible generar una versión de la aplicación para Mac o Linux. No obstante, consulte la sección de ejecución local para poder ejecutarlo en dichos sistemas
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Ejecución local
 
-## Build
+Si se desea ejecutar el proyect(o de forma local es necesario tener instalado [NodeJS](https://nodejs.org/), para descargar las dependencias del proyecto listadas en el `package.json`. Para instalar dichas dependencias, es necesario ejecutar en la terminal del sistema el siguiente comando:
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+```
+$ npm i
+```
 
-## Running unit tests
+### Ejecución web
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Para ejecutar el proyecto en web, basta con ejecutar el siguiente comando:
 
-## Running end-to-end tests
+```
+$ npm start
+```
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+Esto compilará el proyecto angular y lo lanzará en un [servidor local](http://localhost:4200)
 
-## Further help
+### Ejecución local
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+Para ejecutar el proyecto en electron, basta con ejecutar el siguiente comando:
+
+```
+$ npm run electron
+```
+
+Esto compilará el proyecto angular, generará un archivo ejecutable y lo lanzará localmente. Cuando termine el proceso, la aplicación aparecerá en pantalla automáticamente
+
+## Uso
+
+En el proceso de diseño de la interfaz de la aplicación se ha tenido muy en cuenta la experiencia del usuario. Por ello se ha hecho especial hincapié en la sencillez de la misma. Debido a esta sencillez, se considera que una pequeña guía visual bastará para mostrar todas las funcionalidades de la aplicación.
+
+![walthrough](./public/walkthrough.gif)
+
+## Tecnologías
+
+Se ha implementado el proyecto en [Angular](https://angular.io/) dado su gran potencial para crear aplicaciones web. Además, se ha empleado [Electron](https://www.electronjs.org/) para evitar el uso de servidores o bases de datos externas. Esta decisión viene motivada de la decisión de dejar el código completo del proyecto de forma visbile y libre. De esta manera, se evitan posibles brechas de seguridad que permitan el acceso a datos de diferentes usuarios de la aplicación. Además, permite que el proyecto sea usado libremente y adaptado a cualquier tecnolgía de forma fácil. El listado completo de dependencias se muestra a continuación:
+
+- [Angular](https://angular.io/)
+- [Electron](https://www.electronjs.org/)
+- [PrimeNG](https://www.primefaces.org/primeng/)
+- [TailwindCSS](https://tailwindcss.com/)
+- [SweetAlert](https://sweetalert2.github.io/)
