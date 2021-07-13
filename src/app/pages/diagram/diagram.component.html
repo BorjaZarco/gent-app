@@ -66,6 +66,7 @@
     <app-family-diagram [personId]="selectedTop?.husband"></app-family-diagram>
   </div>
   <div
+    *ngIf="!selectedTop"
     class="
       flex
       h-screen
