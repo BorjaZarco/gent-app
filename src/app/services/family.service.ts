@@ -21,8 +21,6 @@ export class FamilyService {
 
   async loadFamiliesLocalDB() {
     const families = await this.dataService.loadData('families');
-    console.log(families);
-
     this.loadFamilies(families);
   }
 
