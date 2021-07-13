@@ -80,6 +80,7 @@ export class DiagramComponent implements OnInit {
         const newSelectedPersonId = params?.get('id');
         this.onPersonSelected(newSelectedPersonId);
       });
+
     setTimeout(() => {
       if (newSelectedPersonId) {
         this.onPersonSelected(newSelectedPersonId);
@@ -212,8 +213,9 @@ export class DiagramComponent implements OnInit {
       }
 
       const content = await this.readGedFile(file);
-      this.familyService.loadFamiliesFromFile(content);
-      this.peopleService.loadPeopleFromFile(content);
+
+      await this.familyService.loadFamiliesFromFile(content);
+      await this.peopleService.loadPeopleFromFile(content);
       ((event as Event).target as HTMLInputElement).value = '';
 
       this.ngOnInit();
